@@ -4,16 +4,19 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
+import com.vkopendoh.hibernate.entity.Instructor;
+import com.vkopendoh.hibernate.entity.InstructorDetail;
 import com.vkopendoh.hibernate.entity.Student;
 
-public class DeleteStudentDemo {
+public class DeleteDemo {
 
 	public static void main(String[] args) {
 		
 		//create session factory
 		SessionFactory factory = new Configuration()
 				.configure("hibernate.cfg.xml")
-				.addAnnotatedClass(Student.class)
+				.addAnnotatedClass(Instructor.class)
+				.addAnnotatedClass(InstructorDetail.class)
 				.buildSessionFactory();
 		
 		//create session
@@ -22,24 +25,22 @@ public class DeleteStudentDemo {
 		
 		try {
 			
-			int studentId = 1;
-			//get a new session and start transaction 
-			session = factory.getCurrentSession();
+			//start transaction
 			session.beginTransaction();
 			
-			System.out.println("Getting student with ID: " + studentId);
-			Student myStudent = session.get(Student.class, studentId);
-			/*
-			 * System.out.println("Deleting student..." + myStudent);
-			 * session.delete(myStudent);
-			 */
+			// get the instructor by id
+			int theId = 1;
+			Instructor tmpInstructor = session.get(Instructor.class, theId);
+			 
+			System.out.println("Found instructor: " + tmpInstructor); 
+			//delete the insructor
+			if(tmpInstructor!=null) {
+				System.out.println("Delete " + tmpInstructor);
+				session.delete(tmpInstructor);
+			}
 			
-			//delete student id=2
-			session.createQuery("delete from Student where id=2").executeUpdate();
 			//commit transaction
 			session.getTransaction().commit();
-			
-			
 			
 			System.out.println("Done!");		
 		}finally {
