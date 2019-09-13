@@ -7,8 +7,7 @@ import org.hibernate.cfg.Configuration;
 import com.vkopendoh.hibernate.entity.Instructor;
 import com.vkopendoh.hibernate.entity.InstructorDetail;
 
-
-public class DeleteDemo {
+public class DeleteInstructorDetailDemo {
 
 	public static void main(String[] args) {
 		
@@ -28,22 +27,29 @@ public class DeleteDemo {
 			//start transaction
 			session.beginTransaction();
 			
-			// get the instructor by id
-			int theId = 1;
-			Instructor tmpInstructor = session.get(Instructor.class, theId);
-			 
-			System.out.println("Found instructor: " + tmpInstructor); 
-			//delete the insructor
-			if(tmpInstructor!=null) {
-				System.out.println("Delete " + tmpInstructor);
-				session.delete(tmpInstructor);
-			}
+			//get the instructor detail object
+			int theId = 2;
+			InstructorDetail tmpInstructorDetail = session.get(InstructorDetail.class, theId);			
+			
+			System.out.println("tmpInstructorDetail: " + tmpInstructorDetail);
+			//print associated instructor
+			System.out.println("the Instructor: "+ tmpInstructorDetail.getInstructor());
+			
+			//delete instructor detail
+			session.delete(tmpInstructorDetail);		
 			
 			//commit transaction
 			session.getTransaction().commit();
 			
 			System.out.println("Done!");		
-		}finally {
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		finally {
+			//handle connection leak issue
+			session.close();
+			
 			factory.close();
 		}
 

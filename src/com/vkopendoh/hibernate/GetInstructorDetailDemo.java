@@ -6,7 +6,6 @@ import org.hibernate.cfg.Configuration;
 
 import com.vkopendoh.hibernate.entity.Instructor;
 import com.vkopendoh.hibernate.entity.InstructorDetail;
-import com.vkopendoh.hibernate.entity.Student;
 
 public class GetInstructorDetailDemo {
 
@@ -29,7 +28,7 @@ public class GetInstructorDetailDemo {
 			session.beginTransaction();
 			
 			//get the instructor detail object
-			int theId = 2;
+			int theId = 299;
 			InstructorDetail tmpInstructorDetail = session.get(InstructorDetail.class, theId);			
 			
 			System.out.println("tmpInstructorDetail: " + tmpInstructorDetail);
@@ -40,7 +39,14 @@ public class GetInstructorDetailDemo {
 			session.getTransaction().commit();
 			
 			System.out.println("Done!");		
-		}finally {
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		finally {
+			//handle connection leak issue
+			session.close();
+			
 			factory.close();
 		}
 
