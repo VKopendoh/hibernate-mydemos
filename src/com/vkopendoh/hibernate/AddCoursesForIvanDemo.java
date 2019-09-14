@@ -7,8 +7,10 @@ import org.hibernate.cfg.Configuration;
 import com.vkopendoh.hibernate.entity.Course;
 import com.vkopendoh.hibernate.entity.Instructor;
 import com.vkopendoh.hibernate.entity.InstructorDetail;
+import com.vkopendoh.hibernate.entity.Review;
+import com.vkopendoh.hibernate.entity.Student;
 
-public class CreateCoursesDemo {
+public class AddCoursesForIvanDemo {
 
 	public static void main(String[] args) {
 		
@@ -18,6 +20,8 @@ public class CreateCoursesDemo {
 				.addAnnotatedClass(Instructor.class)
 				.addAnnotatedClass(InstructorDetail.class)
 				.addAnnotatedClass(Course.class)
+				.addAnnotatedClass(Review.class)
+				.addAnnotatedClass(Student.class)
 				.buildSessionFactory();
 		
 		//create session
@@ -28,22 +32,21 @@ public class CreateCoursesDemo {
 			//start transaction
 			session.beginTransaction();
 			
-			//get instructor from db
-			int id= 1;
-			Instructor instructor = session.get(Instructor.class, id);
+			int id =1;
+			Student student = session.get(Student.class, id);
 			
-			//create courses
-			Course course1 = new Course("Java ultimate courses");
-			Course course2 = new Course("C# super-dupper courses");
+			Course course1 = new Course("Supper-drupper music course");
+			Course course2 = new Course("Coding courses for dummies");
 			
-			//add courses to instructor
-			instructor.add(course1);
-			instructor.add(course2);
-			
-			//save them
+			course1.addStudent(student);
+			course2.addStudent(student);
+	
+			// save the courses
+			System.out.println("Saving courses ... ");
 			session.save(course1);
 			session.save(course2);
-			
+			System.out.println("Course saved" + student.getCourses());
+						
 			//commit transaction
 			session.getTransaction().commit();
 			
